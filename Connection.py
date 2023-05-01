@@ -8,6 +8,7 @@ import time
 #Variable global de reconocimiento
 global_variable = 0
 
+#Clase para crear el socket y sus diferentes metodos.
 class Kernel:
 
     def __init__(self, ipV4: str = "172.18.9.7", port: int = 6400, baud_rate: int = 9600) -> None:
@@ -61,19 +62,19 @@ class Kernel:
         self.kernel.close()
 
 # Carga el modelo entrenado
-
-path = 'C:/Users/eugeb/OneDrive/Escritorio/Modelos/modelo_prueba1.h5'
+path = 'C:/Users/PATH/modelo_prueba1.h5' #Modelo de Keras, previamente entrenado
 model = load_model(
     path,
     custom_objects={'KerasLayer': hub.KerasLayer}
 )
 
 # Define las clases
-classes = ['Carnes', 'Lechugas', 'Panes', 'Tomates']
+classes = ['Carnes', 'Lechugas', 'Panes', 'Tomates'] #Ingredientes Basicos de la Hamburguesa
 
 # Abre la cámara
 cap = cv2.VideoCapture(0)
 
+#Funcion para en donde se le toma una foto y se analiza, para enviar el dato.
 def Reconocimiento():
     while True:
         # Captura un frame de la cámara
@@ -82,7 +83,7 @@ def Reconocimiento():
         # Muestra el frame en una ventana
         cv2.imshow('Camera', frame)
 
-        # Espera a que se presione la tecla 'f'
+        # Espera a que se presione la tecla 'f' para hacer captura
         if cv2.waitKey(1) == ord('f'):
             # Guarda la foto en la ubicación del archivo Python
             cv2.imwrite('foto.png', frame)
@@ -132,17 +133,17 @@ def Reconocimiento():
             break
 
 #Intancia de la clase Kernel
-k = Kernel(ipV4="172.18.9.7", port=6400, baud_rate=9600)
+k = Kernel(ipV4="172.18.9.7", port=6400, baud_rate=9600) #IP y Puerto para la creacion del Socket
 k.connect()
 
 #Llamado a la funciones en orden de bucle
 while True:
-    for i in range(5):
-        Reconocimiento()
-        response = k.send(str(global_variable))
-        print(f'La variable global almacenada es: {global_variable}')
-        print(response)
-        print(i)
+    for i in range(30): #Al menos 30 imagenes analizadas
+        Reconocimiento() #Funcion Reconocimiento, permite tomar la imagen para analizarla.
+        response = k.send(str(global_variable)) #Envio de variable al metodo Send, para enviar dato al RobotStudio
+        print(f'La variable global almacenada es: {global_variable}') #Verificacion de la variable enviada.
+        print(response) #Respuesta del Socket
+        print(i) #Imprime la iteracion del bucle para llevar un control.
     # Libera la cámara y cierra las ventanas
     k.kill()
     cap.release()
