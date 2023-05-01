@@ -1,0 +1,131 @@
+MODULE Module1
+    !Conexion
+    VAR socketdev serverSockert;
+    VAR socketdev clientSockert;
+    VAR string data;
+    !Creación de plantilla
+    CONST jointtarget HOME:=[[0,0,0,0,0,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    !Posición de seguridad
+    CONST robtarget P10:=[[450,0,450],[4.14816E-8,6.1133E-9,-1,-2.53589E-16],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    !Movimiento para la recoleccion del pan 1
+    CONST robtarget P20:=[[504.98,-412.07,297.87],[0.336128,-0.0460822,-0.940601,-0.0128061],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P30:=[[606.58,-470.91,284.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P40:=[[606.58,-470.91,384.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P50:=[[520.39,98.58,325.26],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P60:=[[382.7,298.58,305.39],[0.492728,-0.0123692,-0.865138,0.0923292],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    !Movimientos para la recoleccion de Carne
+    CONST robtarget P90:=[[504.98,-312.07,297.87],[0.336128,-0.0460822,-0.940601,-0.0128061],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P100:=[[606.58,-340.91,284.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P110:=[[606.58,-370.91,384.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P120:=[[520.39,98.58,325.26],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P130:=[[382.7,298.58,325.39],[0.492728,-0.0123692,-0.865138,0.0923292],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    !Movimientos para la recoleccion del Tomate
+    CONST robtarget P140:=[[504.98,-212.07,297.87],[0.336128,-0.0460822,-0.940601,-0.0128061],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P150:=[[606.58,-230.91,284.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P160:=[[606.58,-270.91,384.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P170:=[[520.39,98.58,325.26],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P180:=[[382.7,298.58,345.39],[0.492728,-0.0123692,-0.865138,0.0923292],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    !Movimientos para la recoleccion de la Lechuga
+    CONST robtarget P190:=[[504.98,-112.07,297.87],[0.336128,-0.0460822,-0.940601,-0.0128061],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P200:=[[606.58,-130.91,284.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P210:=[[606.58,-170.91,384.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P220:=[[520.39,98.358,325.26],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P230:=[[382.7,298.58,365.39],[0.492728,-0.0123692,-0.865138,0.0923292],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    !Movimientos para la recoleccion del pan 2
+    CONST robtarget P240:=[[504.98,-12.07,297.87],[0.336128,-0.0460822,-0.940601,-0.0128061],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P250:=[[606.58,0,284.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P260:=[[606.58,-70.91,384.93],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P270:=[[520.39,98.58,325.26],[0.27721,0.0125724,-0.960132,0.0288485],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    CONST robtarget P280:=[[382.7,298.58,385.39],[0.492728,-0.0123692,-0.865138,0.0923292],[0,0,-1,0],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+    
+    PROC main()
+        !Añada aquí su código
+        MoveAbsJ HOME\NoEOffs, v1000, z50, tool0;
+    
+        MoveJ P10, v100, z50, tool0;
+        
+        !Conexion con python
+        SocketCreate serverSockert;
+        SocketBind serverSockert, "192.168.125.1", 6400;
+        SocketListen serverSockert;
+        SocketAccept serverSockert, clientSockert, \Time:=WAIT_MAX;
+        SocketSend clientSockert \Str:= "Conexion realizada con exito";
+        
+        !Programa
+        WHILE TRUE DO
+            SocketReceive clientSockert \Str:= data;
+            
+            !Pan1
+                WHILE data <> "2" DO
+                    SocketReceive clientSockert \Str:= data;
+                ENDWHILE
+                        !Primer elemento Pan 1
+                        MoveJ P10, v100, z50, tool0;
+                        MoveL P20, v100, z50, tool0;
+                        MoveL P30, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P40, v100, z50, tool0;
+                        MoveL P50, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P60, v100, z50, tool0;
+                        MoveL P10, v100, fine, tool0;
+                        
+                !Carne
+                WHILE data <> "0" DO
+                    SocketReceive clientSockert \Str:= data;
+                ENDWHILE
+                        MoveL P90, v100, z50, tool0;
+                        MoveL P100, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P110, v100, z50, tool0;
+                        MoveL P120, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P130, v100, z50, tool0;
+                        
+                !Tomate
+                MoveL P10, v50, fine, tool0;
+               WHILE data <> "3" DO
+                    SocketReceive clientSockert \Str:= data;
+                ENDWHILE
+                        MoveL P140, v100, z50, tool0;
+                        MoveL P150, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P160, v100, z50, tool0;
+                        MoveL P170, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P180, v100, z50, tool0;
+                        MoveL P10, v50, fine, tool0;
+    
+                !Lechuga
+                WHILE data <> "1" DO
+                    SocketReceive clientSockert \Str:= data;
+                ENDWHILE
+                        MoveL P190, v100, z50, tool0;
+                        MoveL P200, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P210, v100, z50, tool0;
+                        MoveL P220, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P230, v100, z50, tool0;
+                        MoveL P10, v50, fine, tool0;
+                        
+                !Pan 2
+                WHILE data <> "2" DO
+                    SocketReceive clientSockert \Str:= data;
+                ENDWHILE
+                        MoveL P240, v100, z50, tool0;
+                        MoveL P250, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P260, v100, z50, tool0;
+                        MoveL P270, v100, z50, tool0;
+                        WaitTime 2.5;
+                        MoveL P280, v100, z50, tool0;
+                !Posicion de seguridad
+                MoveL P10, v50, fine, tool0;
+            !ENDWHILE
+            WaitTime(1);
+        ENDWHILE
+        
+        MoveAbsJ HOME\NoEOffs, v1000, z50, tool0;
+    ENDPROC
+ENDMODULE
